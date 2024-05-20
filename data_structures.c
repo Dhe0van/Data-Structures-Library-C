@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifndef SINGLE_LINKED_LIST
+#define SINGLE_LINKED_LIST
 struct SingleLinkedListNode {
     int value;
     struct SingleLinkedListNode* next;
@@ -92,3 +94,102 @@ void printSingleLinkedList(struct SingleLinkedList* list) {
     }
     puts("");
 }
+
+#endif
+
+#ifndef DOUBLE_LINKED_LIST
+#define DOUBLE_LINKED_LIST
+
+struct DoubleLinkedListNode {
+    int value;
+    struct DoubleLinkedListNode* next;
+    struct DoubleLinkedListNode* prev;
+};
+
+struct DoubleLinkedList {
+    struct DoubleLinkedListNode* head;
+    struct DoubleLinkedListNode* tail;
+};
+
+
+struct DoubleLinkedList* newDoubleLinkedList() {
+    struct DoubleLinkedList* list = (struct DoubleLinkedList*) malloc(sizeof(struct DoubleLinkedList));
+
+    list->head = list->tail = NULL;
+    return list;
+}
+
+struct DoubleLinkedListNode* newDoubleLinkedListNode(int value) {
+    struct DoubleLinkedListNode* newNode = (struct DoubleLinkedListNode*) malloc(sizeof(struct DoubleLinkedListNode));
+
+    newNode->value = value;
+    newNode->next = newNode->prev = NULL;
+    return newNode;
+}
+
+void insertDoubleLinkedListNode(struct DoubleLinkedList* list, int value) {
+    struct DoubleLinkedListNode* newNode = newDoubleLinkedListNode(value);
+
+    if (list->head == NULL && list->tail == NULL) {
+        list->head = list->tail = newNode;
+    } else if (list->head->value >= value) {
+        newNode->next = list->head;
+        list->head->prev = newNode;
+        list->head = newNode;
+    } else if (list->tail->value <= value) {
+        list->tail->next = newNode;
+        newNode->prev = list->tail;
+        list->tail = newNode;
+    } else {
+        struct DoubleLinkedListNode* temp = list->head;
+        while (temp != NULL) {
+            if (temp->next->value >= value) {
+                newNode->prev = temp;
+                newNode->next = temp->next;
+                temp->next->prev = newNode;
+                temp->next = newNode;
+                break;
+            }
+            temp = temp->next;
+        }
+    }
+}
+
+void removeDoubleLinkedListNode(struct DoubleLinkedList* list, int value) {
+    if (list->head == NULL && list->tail == NULL) return;
+    else if (list->head == list->tail) list->head = list->tail = NULL;
+    else if (list->head->value == value) {
+        struct DoubleLinkedListNode* temp = list->head;
+        list->head = list->head->next;
+        list->head->prev = NULL;
+        free(temp);
+    } else if (list->tail->value == value) {
+        struct DoubleLinkedListNode* temp = list->tail;
+        list->tail = list->tail->prev;
+        list->tail->next = NULL;
+        free(temp);
+    } else {
+        struct DoubleLinkedListNode* temp = list->head;
+        while (temp->next->next != NULL) {
+            if (temp->next->value == value) {
+                struct DoubleLinkedListNode* removedNode = temp->next;
+                temp->next = temp->next->next;
+                temp->next->prev = temp;
+                free(removedNode);
+                break;
+            }
+            temp = temp->next;
+        }
+    }
+}
+
+void printDoubleLinkedList(struct DoubleLinkedList* list) {
+    struct DoubleLinkedListNode* temp = list->head;
+    while (temp != NULL) {
+        printf("%d <-> ", temp->value);
+        temp = temp->next;
+    }
+    puts("");
+}
+
+#endif
