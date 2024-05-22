@@ -193,3 +193,91 @@ void printDoubleLinkedList(struct DoubleLinkedList* list) {
 }
 
 #endif
+
+#ifndef BINARY_SEARCH_TREE
+#define BINARY_SEARCH_TREE
+
+struct BinarySearchTree {
+    int value;
+    int count;
+    struct BinarySearchTree* left;
+    struct BinarySearchTree* right;
+};
+
+
+struct BinarySearchTree* newBST_node(int value) {
+    struct BinarySearchTree* newNode = (struct BinarySearchTree*) malloc(sizeof(struct BinarySearchTree));
+
+    newNode->value = value;
+    newNode->count = 1;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+struct BinarySearchTree* insertBST_node(struct BinarySearchTree* bst, int value) {
+    if (bst == NULL) bst = newBST_node(value);
+    else if (bst->value > value) bst->left = insertBST_node(bst->left, value);
+    else if (bst->value < value) bst->right = insertBST_node(bst->right, value);
+    else if (bst->value == value) bst->count += 1;
+
+    return bst;
+}
+
+struct BinarySearchTree* findPredecessorNode(struct BinarySearchTree* bst) {
+    while (bst->right != NULL) {
+        bst = bst->right;
+    }
+    return bst;
+}
+
+struct BinarySearchTree* deleteBST_node(struct BinarySearchTree* bst, int value) {
+    if (bst == NULL) return bst;
+    else if (bst->value > value) bst->left = deleteBST_node(bst->left, value);
+    else if (bst->value < value) bst->right = deleteBST_node(bst->right, value);
+    else {
+        if (bst->left == NULL && bst->right == NULL) {
+            free(bst);
+            bst = NULL;
+        } else if (bst->left == NULL) {
+            struct BinarySearchTree* temp = bst;
+            bst = bst->right;
+            free(temp);
+        } else if (bst->right == NULL) {
+            struct BinarySearchTree* temp = bst;
+            bst = bst->left;
+            free(temp);
+        } else {
+            struct BinarySearchTree* temp = findPredecessorNode(bst->left);
+            bst->value = temp->value;
+            bst = deleteBST_node(temp, temp->value);
+        }
+    }
+    return bst;
+}
+
+void printInOrderBST(struct BinarySearchTree* bst) {
+    if (bst == NULL) return;
+
+    printInOrderBST(bst->left);
+    printf("%d ", bst->value);
+    printInOrderBST(bst->right);
+}
+
+
+void printPreOrderBST(struct BinarySearchTree* bst) {
+    if (bst == NULL) return;
+
+    printf("%d ", bst->value);
+    printInOrderBST(bst->left);
+    printInOrderBST(bst->right);
+}
+
+void printPostOrderBST(struct BinarySearchTree* bst) {
+    if (bst == NULL) return;
+
+    printInOrderBST(bst->left);
+    printInOrderBST(bst->right);
+    printf("%d ", bst->value);
+}
+
+#endif

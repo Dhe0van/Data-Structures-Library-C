@@ -43,4 +43,24 @@ void printDoubleLinkedList(struct DoubleLinkedList* list);
 
 #endif
 
+#ifndef BINARY_SEARCH_TREE
+#define BINARY_SEARCH_TREE
+
+struct BinarySearchTree {
+    int value;
+    int count;
+    struct BinarySearchTree* left;
+    struct BinarySearchTree* right;
+};
+
+struct BinarySearchTree* newBST_node(int value);
+struct BinarySearchTree* insertBST_node(struct BinarySearchTree* bst, int value);
+struct BinarySearchTree* findPredecessorNode(struct BinarySearchTree* bst);
+struct BinarySearchTree* deleteBST_node(struct BinarySearchTree* bst, int value);
+void printInOrderBST(struct BinarySearchTree* bst);
+void printPreOrderBST(struct BinarySearchTree* bst);
+void printPostOrderBST(struct BinarySearchTree* bst);
+
+#endif
+
 #endif
