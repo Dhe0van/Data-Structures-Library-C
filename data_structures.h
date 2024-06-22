@@ -63,4 +63,30 @@ void printPostOrderBST(struct BinarySearchTree* bst);
 
 #endif
 
+#ifndef AVL_TREE
+#define AVL_TREE
+
+struct AVLTreeNode {
+    int key;
+    int height;
+    int count;
+    struct AVLTreeNode* left;
+    struct AVLTreeNode* right;
+};
+
+struct AVLTreeNode* createNewAVLTreeNode(int key);
+int getNodeHeight(struct AVLTreeNode* AVLNode);
+int getNodeMaxHeight(struct AVLTreeNode* AVLNode);
+int getNodeBalanceFactor(struct AVLTreeNode* AVLNode);
+struct AVLTreeNode* rotateAVLTreeToRight(struct AVLTreeNode* parent);
+struct AVLTreeNode* rotateAVLTreeToLeft(struct AVLTreeNode* parent);
+struct AVLTreeNode* insertAVLTreeNode(struct AVLTreeNode* curr, int key);
+struct AVLTreeNode* findPredecessorAVLNode(struct AVLTreeNode* curr);
+struct AVLTreeNode* deleteAVLTreeNode(struct AVLTreeNode* curr, int key);
+void printPreOrderAVLTree(struct AVLTreeNode* curr);
+void printInOrderAVLTree(struct AVLTreeNode* curr);
+void printPostOrderAVLTree(struct AVLTreeNode* curr);
+
+#endif
+
 #endif
